@@ -65,8 +65,17 @@ function AuthInitializer({ children }) {
   }, [fetchUser]);
 
   // Listen for 401/403 events from the API layer to force redirect
+  // We ONLY redirect if the user is NOT on a public route.
   useEffect(() => {
-    const handler = () => navigate(ROUTES.LOGIN, { replace: true });
+    const handler = () => {
+      const publicRoutes = [ROUTES.HOME, ROUTES.LOGIN, ROUTES.SIGNUP];
+      const isPublicRoute = publicRoutes.includes(window.location.pathname);
+      
+      if (!isPublicRoute) {
+        navigate(ROUTES.LOGIN, { replace: true });
+      }
+    };
+
     window.addEventListener('auth:unauthorized', handler);
     return () => window.removeEventListener('auth:unauthorized', handler);
   }, [navigate]);
