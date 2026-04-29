@@ -1,8 +1,8 @@
 // ─── SafeRoute Application Constants ─────────────────────────────────────────
 // Centralized configuration to eliminate hardcoded values across the codebase.
 
-export const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
-export const SOCKET_URL = import.meta.env.VITE_SOCKET_URL || 'http://localhost:3000';
+export const API_BASE_URL = import.meta.env.VITE_API_URL || 'https://smart-attendance-2-qeqg.onrender.com';
+export const SOCKET_URL = import.meta.env.VITE_SOCKET_URL || 'https://smart-attendance-2-qeqg.onrender.com';
 
 export const ROLES = {
   ADMIN: 'admin',

@@ -72,7 +72,7 @@ const server = http.createServer(app);
 const PORT   = process.env.PORT || 3000;
 
 // ── CORS Config ───────────────────────────────────────────────────────────────
-const allowedOrigins = (process.env.ALLOWED_ORIGINS || 'http://localhost:5173')
+const allowedOrigins = (process.env.ALLOWED_ORIGINS || 'http://localhost:5173,https://smart-attendance-three-gamma.vercel.app')
     .split(',')
     .map((o) => o.trim());
 
