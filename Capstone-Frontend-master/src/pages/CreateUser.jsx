@@ -27,9 +27,11 @@ import {
   Camera, ScanFace, Eye, EyeOff, X, Check, Loader2, AlertTriangle
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
 
 import { authAPI } from '../lib/api';
+import { ROUTES } from '../lib/constants';
 
 // ─── Password Strength Calculator ────────────────────────────────────────────
 function getPasswordStrength(password) {
@@ -54,6 +56,7 @@ function getPasswordStrength(password) {
 }
 
 const CreateUser = ({ isPublicSignup = false }) => {
+  const navigate = useNavigate();
   const videoRef = useRef(null);
   const streamRef = useRef(null);
 

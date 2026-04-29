@@ -57,8 +57,9 @@ module.exports.createUser = async (req, res) => {
     }
 
     try {
-        // 3. Check email uniqueness
-        const existingUser = await User.findOne({ email: email.toLowerCase() });
+        // 3. Check email uniqueness — Normalize input
+        const normalizedEmail = email.toLowerCase().trim();
+        const existingUser = await User.findOne({ email: normalizedEmail });
         if (existingUser) {
             return res.status(409).json({
                 success: false,
@@ -101,13 +102,13 @@ module.exports.createUser = async (req, res) => {
             const userData = {
                 _id: tempParentId,
                 fullname: fullname.trim(),
-                email: email.toLowerCase().trim(),
+                email: normalizedEmail,
                 password: hash,
                 role,
                 student: studentIds,
             };
 
-            const [newUser] = await User.create([userData]);
+            const newUser = await User.create(userData);
 
             return res.status(201).json({
                 success: true,
@@ -119,13 +120,13 @@ module.exports.createUser = async (req, res) => {
         // 6. Non-parent user creation
         const userData = {
             fullname: fullname.trim(),
-            email: email.toLowerCase().trim(),
+            email: normalizedEmail,
             password: hash,
             role,
             ...(role === 'staff' && branch ? { branch } : {}),
         };
 
-        const [newUser] = await User.create([userData]);
+        const newUser = await User.create(userData);
 
         return res.status(201).json({
             success: true,
@@ -136,12 +137,27 @@ module.exports.createUser = async (req, res) => {
     } catch (err) {
         console.error('[createUser]', err.message);
 
-        // Duplicate key from race condition
+        // ── Enhanced 11000 Error Handling ──
         if (err.code === 11000) {
-            return res.status(409).json({
-                success: false,
-                error: 'An account with this email already exists',
-            });
+            const field = Object.keys(err.keyValue || {})[0];
+            
+            // Check if it's the User email or Student index (class/roll)
+            if (field === 'email') {
+                return res.status(409).json({
+                    success: false,
+                    error: 'An account with this email already exists',
+                });
+            }
+            
+            // Handle student roll number collision
+            if (err.message.includes('student') || field === 'roll' || field === 'class') {
+                return res.status(409).json({
+                    success: false,
+                    error: 'A student with this Class and Roll number is already registered',
+                });
+            }
+
+            return res.status(409).json({ success: false, error: 'Duplicate entry detected' });
         }
 
         // Mongoose validation error
