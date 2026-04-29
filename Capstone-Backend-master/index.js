@@ -12,14 +12,23 @@
  *  8. Graceful shutdown handlers
  */
 
+console.log('🚀 Starting SafeRoute Enterprise Server...');
+
 require('dotenv').config(); // ✅ FIRST — before any import that reads env
 
 // ── Env Validation ────────────────────────────────────────────────────────────
-const REQUIRED_ENV = ['MONGO_URI', 'JWT_SECRET_KEY', 'OPEN_ROUTER_KEY', 'NODE_ENV'];
+// Default NODE_ENV to production if not set (standard for cloud deployments)
+process.env.NODE_ENV = process.env.NODE_ENV || 'production';
+
+const REQUIRED_ENV = ['MONGO_URI', 'JWT_SECRET_KEY', 'OPEN_ROUTER_KEY'];
 const missing = REQUIRED_ENV.filter((k) => !process.env[k]);
+
 if (missing.length) {
-    console.error(`❌ Missing required environment variables: ${missing.join(', ')}`);
-    process.exit(1);
+    console.error('❌ CRITICAL: Missing required environment variables:');
+    missing.forEach(v => console.error(`   - ${v}`));
+    console.error('👉 Ensure these are set in your Render.com Environment settings.');
+    // Exit after a short delay to allow logs to flush
+    setTimeout(() => process.exit(1), 100);
 }
 
 // ── Core Imports ──────────────────────────────────────────────────────────────

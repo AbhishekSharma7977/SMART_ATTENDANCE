@@ -20,6 +20,7 @@ const connectDB = async () => {
     }
 
     try {
+        console.log(`🔌 Attempting MongoDB connection to host: ${new URL(uri).host}...`);
         const conn = await mongoose.connect(uri, {
             // Enterprise Atlas connection pool settings
             maxPoolSize: 50,          // Atlas scalable pool
@@ -35,11 +36,13 @@ const connectDB = async () => {
         console.error(`❌ MongoDB connection error: ${err.message}`);
         // Atlas diagnostic hint
         if (err.message.includes('bad auth')) {
-            console.error('👉 Hint: Check if your MongoDB Atlas username/password in .env is correct.');
-        } else if (err.message.includes('querySrv')) {
-            console.error('👉 Hint: Check if your network/IP is whitelisted in MongoDB Atlas Network Access.');
+            console.error('👉 Hint: Check if your MongoDB Atlas username/password in environment variables is correct.');
+        } else if (err.message.includes('querySrv') || err.message.includes('timeout')) {
+            console.error('👉 Hint: Ensure your network/IP is whitelisted (0.0.0.0/0) in MongoDB Atlas Network Access.');
         }
-        process.exit(1);
+        
+        // Wait briefly for logs to flush before exiting
+        setTimeout(() => process.exit(1), 500);
     }
 };
 
