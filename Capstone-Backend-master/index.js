@@ -78,9 +78,10 @@ const allowedOrigins = (process.env.ALLOWED_ORIGINS || 'http://localhost:5173')
 
 const corsOptions = {
     origin: (origin, callback) => {
-        // Allow non-browser tools (curl, Postman) in dev; in prod require origin
-        if (!origin && process.env.NODE_ENV !== 'production') return callback(null, true);
-        if (allowedOrigins.includes(origin)) return callback(null, true);
+        // Allow direct visits (no origin) or allowed origins
+        if (!origin || allowedOrigins.includes(origin)) {
+            return callback(null, true);
+        }
         return callback(new Error(`CORS policy: origin ${origin} not allowed`));
     },
     credentials: true,
@@ -171,7 +172,16 @@ app.use(globalLimiter);
 */
 app.set('trust proxy', 1);
 
-// ── Health Check ──────────────────────────────────────────────────────────────
+// ── Health Check & Root ───────────────────────────────────────────────────────
+app.get('/', (req, res) => {
+    res.status(200).json({
+        success: true,
+        message: '🚀 SafeRoute Enterprise API is active',
+        documentation: 'https://render.com/docs',
+        health: '/health'
+    });
+});
+
 app.get('/health', (req, res) => {
     res.status(200).json({
         success: true,
