@@ -1,16 +1,59 @@
-# React + Vite
+# 📱 SafeRoute — Frontend (Client-Side)
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Welcome to the frontend core of **SafeRoute**. This application is built using **React 19** and **Vite**, designed for maximum performance, ultra-smooth animations, and a premium user experience.
 
-Currently, two official plugins are available:
+## ⚡ Tech Stack Details
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+- **Framework:** React 19 (Latest)
+- **Build Tool:** Vite 8
+- **Styling:** Tailwind CSS 4 (Next-gen utility-first CSS)
+- **State Management:** Zustand (Lightweight & Reactive)
+- **Animations:** Framer Motion (Fluid transitions and micro-interactions)
+- **Icons:** Lucide React
+- **Face Recognition:** Face-api.js & TensorFlow.js
+- **Charts:** Recharts
 
-## React Compiler
+---
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## 📂 Folder Structure
 
-## Expanding the ESLint configuration
+- `src/components/`: Modular UI components (Layout, Sidebar, Dashboard cards).
+- `src/stores/`: Zustand store definitions for Auth and State.
+- `src/lib/`: API clients (Axios) and utility helper functions.
+- `src/pages/`: Page-level components for routing.
+- `public/`: Contains the pre-trained weights for the AI Face Models.
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+---
+
+## 🤖 AI Face Recognition
+The frontend handles client-side face detection and recognition. 
+1. **Model Loading:** Models are loaded from the `/public/models` directory.
+2. **Real-time Detection:** Uses the device camera to detect landmarks and match descriptors.
+3. **Low Latency:** Optimized for high FPS even on mobile devices using WebGL backend.
+
+---
+
+## 🛠️ Getting Started
+
+1. **Install Dependencies:**
+   ```bash
+   npm install
+   ```
+
+2. **Start Development Server:**
+   ```bash
+   npm run dev
+   ```
+
+3. **Build for Production:**
+   ```bash
+   npm run build
+   ```
+
+---
+
+## 🎨 Design System
+SafeRoute uses a custom design system built on **Tailwind CSS 4**, featuring:
+- **Glassmorphism:** Frosted glass effects for overlays and cards.
+- **Dynamic Color Palettes:** Sophisticated dark mode with neon accents.
+- **Responsive Layouts:** Mobile-first approach for accessibility on the go.
